@@ -1,6 +1,7 @@
 package de.siphalor.spiceoffabric.container;
 
 import de.siphalor.spiceoffabric.item.FoodContainerItem;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.Inventory;
@@ -62,7 +63,7 @@ public class ItemStackInventory implements Inventory {
 
 	@Override
 	public boolean isValid(int slot, ItemStack stack) {
-		return stack.isFood() && !(stack.getItem() instanceof FoodContainerItem);
+		return stack.contains(DataComponentTypes.FOOD) && !(stack.getItem() instanceof FoodContainerItem);
 	}
 
 	@Override

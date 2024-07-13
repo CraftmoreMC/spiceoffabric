@@ -5,11 +5,13 @@ import de.siphalor.spiceoffabric.foodhistory.FoodHistory;
 import de.siphalor.spiceoffabric.foodhistory.FoodHistoryEntry;
 import de.siphalor.spiceoffabric.util.FoodUtils;
 import de.siphalor.spiceoffabric.util.IHungerManager;
+import net.minecraft.component.ComponentType;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.FoodComponent;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.FoodComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -100,11 +102,11 @@ public class FoodJournalScreenHandler extends ScreenHandler {
 			var stacks = foodHistory.getUniqueFoodsEaten().stream()
 					.map(FoodHistoryEntry::getStack)
 					.sorted(Comparator.comparingInt(stack -> {
-						FoodComponent foodComponent = stack.getItem().getFoodComponent();
+						FoodComponent foodComponent = stack.get(DataComponentTypes.FOOD);
 						if (foodComponent == null) {
 							return 0;
 						}
-						return foodComponent.getHunger();
+						return foodComponent.nutrition();
 					}))
 					.toList();
 			return new PaginatedReadOnlyInventory(JOURNAL_SLOT_COUNT, stacks);
@@ -115,11 +117,11 @@ public class FoodJournalScreenHandler extends ScreenHandler {
 					.filter(FoodUtils::isFood)
 					.filter(item -> !eatenItems.contains(item))
 					.sorted(Comparator.comparingInt(item -> {
-						FoodComponent foodComponent = item.getFoodComponent();
+						FoodComponent foodComponent = item.getComponents().get(DataComponentTypes.FOOD);
 						if (foodComponent == null) {
 							return 0;
 						}
-						return foodComponent.getHunger();
+						return foodComponent.nutrition();
 					}))
 					.map(ItemStack::new)
 					.toList();
