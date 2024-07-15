@@ -36,9 +36,9 @@ public class FoodJournalScreenHandler extends ScreenHandler {
 
 	static {
 		PREV_STACK = new ItemStack(Items.FEATHER);
-		PREV_STACK.setCustomName(Text.translatable("createWorld.customize.custom.prev").styled(style -> style.withItalic(false)));
+		PREV_STACK.set(DataComponentTypes.CUSTOM_NAME, Text.translatable("createWorld.customize.custom.prev").styled(style -> style.withItalic(false)));
 		NEXT_STACK = new ItemStack(Items.FLINT);
-		NEXT_STACK.setCustomName(Text.translatable("createWorld.customize.custom.next").styled(style -> style.withItalic(false)));
+		NEXT_STACK.set(DataComponentTypes.CUSTOM_NAME, Text.translatable("createWorld.customize.custom.next").styled(style -> style.withItalic(false)));
 	}
 
 	private static final int JOURNAL_SLOT_COUNT = 9 * 5;
@@ -133,7 +133,7 @@ public class FoodJournalScreenHandler extends ScreenHandler {
 
 	private ItemStack createPageIndicatorStack() {
 		var stack = new ItemStack(PAGE_INDICATOR_ITEM);
-		stack.setCustomName(
+		stack.set(DataComponentTypes.CUSTOM_NAME,
 				Text.translatable(PAGE_INDICATOR_TEXT_KEY, foodJournalInventory.getPage() + 1, foodJournalInventory.getPageCount())
 						.styled(style -> style.withItalic(false))
 		);
@@ -144,12 +144,14 @@ public class FoodJournalScreenHandler extends ScreenHandler {
 		if (this.currentView == view || !view.isAvailable()) {
 			return ItemStack.EMPTY;
 		}
-		return new ItemStack(itemRepresentation)
-				.setCustomName(
+		ItemStack itemStack = new ItemStack(itemRepresentation);
+		itemStack
+				.set(DataComponentTypes.CUSTOM_NAME,
 						clientHasMod
 								? view.getTranslatableName()
 								: Text.literal(view.getLiteralName()).styled(style -> style.withItalic(false))
 				);
+		return itemStack;
 	}
 
 	private Runnable getViewCallback(FoodJournalView view) {

@@ -41,11 +41,9 @@ import net.minecraft.util.JsonHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
 
 public class SpiceOfFabric implements ModInitializer {
 
@@ -55,7 +53,7 @@ public class SpiceOfFabric implements ModInitializer {
 	public static final int NBT_VERSION = 1;
 	public static final String FOOD_JOURNAL_FLAG = MOD_ID + ":food_journal";
 
-	public static final UUID PLAYER_HEALTH_MODIFIER_UUID = UUID.nameUUIDFromBytes(MOD_ID.getBytes(StandardCharsets.UTF_8));
+	public static final Identifier PLAYER_HEALTH_MODIFIER = Identifier.of(MOD_ID, "player_health");
 
 	public static final Logger LOGGER = LoggerFactory.getLogger(SpiceOfFabric.class);
 	private static final FoodComponent EMPTY_FOOD_COMPONENT = new FoodComponent.Builder().build();
@@ -206,17 +204,16 @@ public class SpiceOfFabric implements ModInitializer {
 
 	public static EntityAttributeModifier createHealthModifier(double amount) {
 		return new EntityAttributeModifier(
-				PLAYER_HEALTH_MODIFIER_UUID,
-				MOD_ID,
+				PLAYER_HEALTH_MODIFIER,
 				amount,
-				EntityAttributeModifier.Operation.ADDITION
+				EntityAttributeModifier.Operation.ADD_VALUE
 		);
 	}
 
 	public static void updateMaxHealth(ServerPlayerEntity player, boolean sync, boolean announce) {
 		EntityAttributeInstance maxHealthAttr = player.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH);
 		double oldValue = maxHealthAttr.getValue();
-		maxHealthAttr.removeModifier(PLAYER_HEALTH_MODIFIER_UUID);
+		maxHealthAttr.removeModifier(PLAYER_HEALTH_MODIFIER);
 
 		if (SOFConfig.carrot.enable) {
 			FoodHistory foodHistory = ((IHungerManager) player.getHungerManager()).spiceOfFabric_getFoodHistory();
