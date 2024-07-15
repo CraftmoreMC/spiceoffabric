@@ -38,7 +38,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FoodContainerItem extends Item implements CamoFoodItem {
-	private static final String INVENTORY_NBT_KEY = "inventory";
 	private static final Style LORE_STYLE = Style.EMPTY.withColor(Formatting.GRAY).withItalic(false);
 	private static final Text LORE_EMPTY = Text.translatable(SpiceOfFabric.MOD_ID + ".food_container.lore.empty").setStyle(LORE_STYLE);
 	private static final String LORE_GENERAL_KEY = SpiceOfFabric.MOD_ID + ".food_container.lore.general";
@@ -125,7 +124,7 @@ public class FoodContainerItem extends Item implements CamoFoodItem {
 	}
 
 	public ItemStackInventory getInventory(ItemStack stack) {
-		return new ItemStackInventory(stack, INVENTORY_NBT_KEY, size);
+		return new ItemStackInventory(stack, size);
 	}
 
 	@Override
